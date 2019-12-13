@@ -9,12 +9,14 @@ export interface TodoType {
 
 interface Props {
   todo: TodoType;
+  showUsername?: boolean;
   onTodoClick: (todo: TodoType) => void;
 }
 
 export default function Todo(props: Props) {
   const {
     todo,
+    showUsername = true,
     todo: {
       title,
       dueDate,
@@ -29,10 +31,12 @@ export default function Todo(props: Props) {
   return (
     <li className={classes} onClick={() => onTodoClick(todo)}>
       <span className="todo-checked" />
-      <span className="todo-author-text">
-        Autor: 
-        <span className="todo-username">{' ' + username}</span>
-      </span>
+      {showUsername && (
+        <span className="todo-author-text">
+          Autor: 
+          <span className="todo-username">{' ' + username}</span>
+        </span>
+      )}
       <span className="todo-title">
         {title}
       </span>

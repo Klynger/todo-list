@@ -5,18 +5,38 @@ import Filters from './Filters';
 import { TodoType } from './Todo';
 import React, { useState, useEffect } from 'react';
 
+interface VisibleTodosByUser {
+  [key: string]: TodoType[];
+}
+
 export default function TodoList() {
   const [todos, setTodos] = useState(TODOS);
-  const [showComplete, setshowComplete] = useState(true);
+  const [showComplete, setShowComplete] = useState(true);
   const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [displayByUsername, setDisplayByUsername] = useState(true);
+  const [visibleTodosByUser, setVisibleTodosByUser] = useState<VisibleTodosByUser>({});
 
   useEffect(() => {
+    let resultList = todos;
     if (!showComplete) {
-      setVisibleTodos(todos.filter(todo => !todo.complete));
-    } else {
-      setVisibleTodos(todos);
+      resultList = todos.filter(todo => !todo.complete);
     }
-  }, [todos, showComplete]);
+
+    if (displayByUsername) {
+      const result: VisibleTodosByUser = {};
+      for (const todo of resultList) {
+        if (result[todo.username]) {
+          result[todo.username].push(todo);
+        } else {
+          result[todo.username] = [todo];
+        }  
+      }
+      setVisibleTodosByUser(result);
+    } else {
+      setVisibleTodos(resultList);
+    }
+
+  }, [todos, showComplete, displayByUsername]);
 
   const handleAddTodo = (todo: TodoType) => {
     setTodos(todos.concat([todo]));
@@ -34,7 +54,7 @@ export default function TodoList() {
         return t;
       });
 
-      setTodos(newTodos)
+      setTodos(newTodos);
   }
 
   return (
@@ -45,9 +65,28 @@ export default function TodoList() {
       <AddTodo onAddTodo={handleAddTodo} />
       <Filters
         showComplete={showComplete}
-        onShowCompleteClick={() => setshowComplete(!showComplete)}
+        displayByUsername={displayByUsername}
+        onShowCompleteClick={() => setShowComplete(!showComplete)}
+        onByUsernameClick={() => setDisplayByUsername(!displayByUsername)}
       />
-      <List todos={visibleTodos} onTodoClick={handleTodoClick} />
+      {displayByUsername ? (
+        <>
+          {Object.keys(visibleTodosByUser).map((username) => (
+            <List
+              key={username}
+              title={username}
+              showTodoUsername={false}
+              onTodoClick={handleTodoClick}
+              todos={visibleTodosByUser[username]}
+            />
+          ))}
+        </>
+      ) : (
+        <List
+          todos={visibleTodos}
+          onTodoClick={handleTodoClick}
+        />
+      )}
     </div>
   );
 }

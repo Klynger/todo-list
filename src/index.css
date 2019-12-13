@@ -19,10 +19,10 @@ code {
 }
 
 .app-container {
+  align-items: flex-start;
   min-height: 100vh;
   width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
@@ -31,10 +31,15 @@ code {
   padding: .75rem;
 }
 
+.list-container {
+  width: 100%;
+}
+
 .todo-list-container {
   align-items: center;
   display: flex;
   flex-direction: column;
+  margin-top: 4rem;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 2px solid #ddd;
@@ -72,7 +77,7 @@ code {
   border: none;
   background-color: #134cd8;
   font-weight: 500;
-  padding: 0;
+  padding: .5rem 0;
   border-radius: .25rem;
   cursor: pointer;
 }
@@ -136,6 +141,20 @@ code {
   border-bottom-left-radius: .25rem;
   border-right: 1px solid #ddd;
   transition: all 250ms ease-in-out;
+}
+
+.filters-container {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-container :not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.filter {
+  cursor: pointer;
 }
 
 .todo-container:hover:not(.todo-complete) .todo-checked {
