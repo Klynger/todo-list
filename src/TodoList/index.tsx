@@ -1,11 +1,22 @@
 import List from './List';
 import AddTodo from './AddTodo';
 import { TODOS } from '../mock';
-import React, { useState } from 'react';
+import Filters from './Filters';
 import { TodoType } from './Todo';
+import React, { useState, useEffect } from 'react';
 
 export default function TodoList() {
   const [todos, setTodos] = useState(TODOS);
+  const [showComplete, setshowComplete] = useState(true);
+  const [visibleTodos, setVisibleTodos] = useState(todos);
+
+  useEffect(() => {
+    if (!showComplete) {
+      setVisibleTodos(todos.filter(todo => !todo.complete));
+    } else {
+      setVisibleTodos(todos);
+    }
+  }, [todos, showComplete]);
 
   const handleAddTodo = (todo: TodoType) => {
     setTodos(todos.concat([todo]));
@@ -32,7 +43,11 @@ export default function TodoList() {
         Todo List
       </h1>
       <AddTodo onAddTodo={handleAddTodo} />
-      <List todos={todos} onTodoClick={handleTodoClick} />
+      <Filters
+        showComplete={showComplete}
+        onShowCompleteClick={() => setshowComplete(!showComplete)}
+      />
+      <List todos={visibleTodos} onTodoClick={handleTodoClick} />
     </div>
   );
 }

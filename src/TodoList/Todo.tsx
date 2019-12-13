@@ -29,7 +29,10 @@ export default function Todo(props: Props) {
   return (
     <li className={classes} onClick={() => onTodoClick(todo)}>
       <span className="todo-checked" />
-      <span className="todo-username">{username}</span>
+      <span className="todo-author-text">
+        Autor: 
+        <span className="todo-username">{' ' + username}</span>
+      </span>
       <span className="todo-title">
         {title}
       </span>

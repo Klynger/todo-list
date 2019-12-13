@@ -26,6 +26,11 @@ code {
   justify-content: center;
 }
 
+.filters-container {
+  width: 100%;
+  padding: .75rem;
+}
+
 .todo-list-container {
   align-items: center;
   display: flex;
@@ -63,7 +68,7 @@ code {
   border-color: #979899;
 }
 
-.add-todo-button {
+.button {
   border: none;
   background-color: #134cd8;
   font-weight: 500;
@@ -72,11 +77,11 @@ code {
   cursor: pointer;
 }
 
-.add-todo-button:hover {
+.button:hover {
   background-color: #0c389f;
 }
 
-.add-todo-text {
+.button-text {
   text-transform: uppercase;
   padding: 0 1rem;
   color: white
@@ -105,7 +110,7 @@ code {
 }
 
 .todo-complete .todo-title,
-.todo-complete .todo-username,
+.todo-complete .todo-author-text,
 .todo-complete .todo-date-time
 {
   opacity: .7;

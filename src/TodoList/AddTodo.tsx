@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import Button from './Button';
 import { TodoType } from './Todo';
+import React, { useState } from 'react';
 
 interface Props {
   onAddTodo: (todo: TodoType) => void;
@@ -36,9 +37,7 @@ function AddTodo(props: Props) {
         placeholder="Usuário"
         onChange={e => setUsername(e.target.value)}
       />
-      <button className="add-todo-button" onClick={handleAddTodo}>
-        <span className="add-todo-text">Add Todo</span>
-      </button>
+      <Button onClick={handleAddTodo}>Adicionar TODO</Button>
     </form>
   );
 }
