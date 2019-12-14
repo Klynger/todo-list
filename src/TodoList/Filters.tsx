@@ -1,7 +1,9 @@
 import React from 'react';
+import Button from './Button';
 
 interface Props {
   showComplete: boolean;
+  onSortTodos: (typeOfOrdenation: 'ASC' | 'DESC') => void;
   displayByUsername: boolean;
   onByUsernameClick: () => void;
   onShowCompleteClick: () => void;
@@ -9,6 +11,7 @@ interface Props {
 
 export default function Filters(props: Props) {
   const {
+    onSortTodos,
     showComplete,
     displayByUsername,
     onByUsernameClick,
@@ -33,6 +36,8 @@ export default function Filters(props: Props) {
         />
         Agrupar por autor
       </label>
+      <Button onClick={() => onSortTodos('DESC')}>Ordernar Todos DESC</Button>
+      \<Button onClick={() => onSortTodos('ASC')}>Ordernar Todos ASC</Button>
     </div>
   );
 }

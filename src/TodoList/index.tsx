@@ -1,3 +1,4 @@
+// @ts-nocheck
 import List from './List';
 import AddTodo from './AddTodo';
 import { TODOS } from '../mock';
@@ -39,7 +40,7 @@ export default function TodoList() {
   }, [todos, showComplete, displayByUsername]);
 
   const handleAddTodo = (todo: TodoType) => {
-    setTodos(todos.concat([todo]));
+    setTodos([todo].concat(todos));
   };
 
   const handleTodoClick = (todo: TodoType) => {
@@ -55,7 +56,16 @@ export default function TodoList() {
       });
 
       setTodos(newTodos);
-  }
+  };
+
+  const handleSortTodos = (typeOfOrdenation: 'ASC' | 'DESC') => {
+    todos.sort((a, b) =>  a.dueDate - b.dueDate);
+    if (typeOfOrdenation === 'ASC') {
+      setVisibleTodos(todos.slice());
+    } else {
+      setVisibleTodos(todos.slice().reverse());
+    }
+  };
 
   return (
     <div className="todo-list-container">
@@ -65,6 +75,7 @@ export default function TodoList() {
       <AddTodo onAddTodo={handleAddTodo} />
       <Filters
         showComplete={showComplete}
+        onSortTodos={handleSortTodos}
         displayByUsername={displayByUsername}
         onShowCompleteClick={() => setShowComplete(!showComplete)}
         onByUsernameClick={() => setDisplayByUsername(!displayByUsername)}
