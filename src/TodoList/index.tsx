@@ -5,37 +5,41 @@ import { TODOS } from '../mock';
 import Filters from './Filters';
 import { TodoType } from './Todo';
 import React, { useState, useEffect } from 'react';
+import { filter, whereEq, ifElse, identity, prop, groupBy, sortBy, reverse, pipe } from 'ramda';
 
 interface VisibleTodosByUser {
   [key: string]: TodoType[];
 }
 
+const filterIncomplete = filter(whereEq({ complete: false }));
+const groupByUser = groupBy(prop('username'));
+const sortByDate = sortBy(prop('dueDate'));
+const sortByDateDesc = pipe(sortByDate, reverse);
+
 export default function TodoList() {
   const [todos, setTodos] = useState(TODOS);
   const [showComplete, setShowComplete] = useState(true);
   const [visibleTodos, setVisibleTodos] = useState(todos);
-  const [displayByUsername, setDisplayByUsername] = useState(true);
+  const [displayByUsername, setDisplayByUsername] = useState(false);
   const [visibleTodosByUser, setVisibleTodosByUser] = useState<VisibleTodosByUser>({});
 
   useEffect(() => {
-    let resultList = todos;
-    if (!showComplete) {
-      resultList = todos.filter(todo => !todo.complete);
-    }
-
-    if (displayByUsername) {
-      const result: VisibleTodosByUser = {};
-      for (const todo of resultList) {
-        if (result[todo.username]) {
-          result[todo.username].push(todo);
-        } else {
-          result[todo.username] = [todo];
-        }  
-      }
-      setVisibleTodosByUser(result);
-    } else {
-      setVisibleTodos(resultList);
-    }
+    const resultList = ifElse(() => !showComplete, filterIncomplete, identity)(todos);
+    const result =  ifElse(() => displayByUsername, groupByUser, identity)(resultList);
+    ifElse(() => displayByUsername, setVisibleTodosByUser, setVisibleTodos)(result);
+    // if (displayByUsername) {
+    //   const result: VisibleTodosByUser = {};
+    //   for (const todo of resultList) {
+    //     if (result[todo.username]) {
+    //       result[todo.username].push(todo);
+    //     } else {
+    //       result[todo.username] = [todo];
+    //     }  
+    //   }
+    //   setVisibleTodosByUser(result);
+    // } else {
+    //   setVisibleTodos(resultList);
+    // }
 
   }, [todos, showComplete, displayByUsername]);
 
@@ -59,12 +63,20 @@ export default function TodoList() {
   };
 
   const handleSortTodos = (typeOfOrdenation: 'ASC' | 'DESC') => {
-    todos.sort((a, b) =>  a.dueDate - b.dueDate);
-    if (typeOfOrdenation === 'ASC') {
-      setVisibleTodos(todos.slice());
-    } else {
-      setVisibleTodos(todos.slice().reverse());
-    }
+    // todos.sort((a, b) =>  a.dueDate - b.dueDate);
+    // if (typeOfOrdenation === 'ASC') {
+    //   setVisibleTodos(todos.slice());
+    // } else {
+    //   setVisibleTodos(todos.slice().reverse());
+    // }
+    // dsfs
+
+    const orderedTodos = ifElse(
+      () => typeOfOrdenation === 'ASC',
+      sortByDate,
+      sortByDateDesc
+    )(todos);
+    setVisibleTodos(orderedTodos.slice());
   };
 
   return (

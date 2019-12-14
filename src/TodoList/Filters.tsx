@@ -3,10 +3,10 @@ import Button from './Button';
 
 interface Props {
   showComplete: boolean;
-  onSortTodos: (typeOfOrdenation: 'ASC' | 'DESC') => void;
   displayByUsername: boolean;
   onByUsernameClick: () => void;
   onShowCompleteClick: () => void;
+  onSortTodos: (typeOfOrdenation: 'ASC' | 'DESC') => void;
 }
 
 export default function Filters(props: Props) {
@@ -37,7 +37,7 @@ export default function Filters(props: Props) {
         Agrupar por autor
       </label>
       <Button onClick={() => onSortTodos('DESC')}>Ordernar Todos DESC</Button>
-      \<Button onClick={() => onSortTodos('ASC')}>Ordernar Todos ASC</Button>
+      <Button onClick={() => onSortTodos('ASC')}>Ordernar Todos ASC</Button>
     </div>
   );
 }
